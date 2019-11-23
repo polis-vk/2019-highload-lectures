@@ -19,26 +19,12 @@ by Вадим Цесько
 
 @fig/highload.png
 
-Формат
-
-Ортогональные аспекты
-проектирования и
-разработки
-
 https://en.wikipedia.org/wiki/Non-functional_requirement
 
-Семинар, а не лекция
-
-* Don't panic
-* Непонятно -- прерывайте
-* Задавайте вопросы
-* Критикуйте
-
 На практике
-
-* Всегда диапазон решений
-* Профдеформация
-* https://en.wikipedia.org/wiki/Cognitive_bias
+• Всегда диапазон решений
+• Профдеформация
+• https://en.wikipedia.org/wiki/Cognitive_bias
 
 ID
 
@@ -46,7 +32,7 @@ int?
 
 long?
 
-String ID!
+String?
 
 "<version>:<long>"
 
@@ -63,15 +49,15 @@ https://github.com/multiformats
 
 Форматы
 
-* Расширяемые
-* Самоописываемые
+• Расширяемые
+• Самоописываемые
 
-* http://avro.apache.org/
-* https://thrift.apache.org/
-* Protobuf
-* JSON
-* version + binary
-* ...
+• http://avro.apache.org/
+• https://thrift.apache.org/
+• Protobuf
+• JSON
+• version + binary
+• ...
 
 Версионируемый
 репозиторий
@@ -79,9 +65,9 @@ https://github.com/multiformats
 
 Immutability
 
-* Concurrent по построению
-* Immutable derivatives
-* Caching-friendly
+• Concurrent по построению
+• Immutable derivatives
+• Caching-friendly
 
 Но!
 
@@ -98,25 +84,25 @@ which are copies of the communication
 structures of these organizations.
 — M. Conway
 
-* Понятный замкнутый домен
-* 1 команда : N сервисов
+• Понятный замкнутый домен
+• 1 команда : N сервисов
 
 Что это даёт?
 
-* Сервис = единица отказа
-* Изменения/деплой
-* Ресурсы
-* Масштабируемость
-* Наблюдаемость
-* (Независимый стек)
+• Сервис = единица отказа
+• Изменения/деплой
+• Ресурсы
+• Масштабируемость
+• Наблюдаемость
+• (Независимый стек)
 
-Colocation
+Монолит
 
-* Взаимовлияние
-* Ресурсы
-* Координация
-* Масштабируемость
-* Наблюдаемость
+• Взаимовлияние
+• Ресурсы
+• Координация
+• Масштабируемость
+• Наблюдаемость
 
 Устройство
 микросервиса
@@ -124,38 +110,39 @@ Colocation
 Синхронная
 обработка
 
-* <1K потоков
-* <1К запросов "в полёте"
+• <1K потоков
+• <1К запросов "в полёте"
 
 Асинхронная
 обработка
 
-* N x cores потоков
-* Сколько угодно запросов "в полёте"
+• N x cores потоков
+• Сколько угодно запросов "в полёте"
 
 @fig/fsm.svg
 
 Пулы потоков
+• IO vs CPU-bound
+• Освобождаем IO ASAP
 
-* IO vs CPU-bound
-* Освобождаем IO ASAP
-* Per service
+Pool per service
+• Наблюдаемость
+• Изоляция
 
-* Наблюдаемость
-* Изоляция
+Как не словить OOM?
 
-* Ограниченные очереди
-* LIFO?
+• Ограниченные очереди
+• LIFO?
 
 Back pressure
 
 @fig/reactive.png
 
-* Paging/chunking or limit
-* Backward/forward marker
+• Paging/chunking and/or limit
+• Backward/forward marker
 
-* Ссылки на ресурсы
-* Мультиплексирование
+• Ссылки на ресурсы
+• Мультиплексирование
 
 @fig/grpc.png
 
@@ -163,128 +150,125 @@ Back pressure
 
 Конфигурирование
 
-* Mission-critical
-* Fallback snapshot
-* Audit log
-* Push vs Poll
+• Mission-critical
+• Fallback to snapshot
+• Audit
+• Push vs Poll
 
 На практике
-
-* By app
-* By host/cluster
-* ${other.property}
+• By app
+• By host/cluster
+• ${other.property}
 
 @fig/typesafe.png
 
 @fig/consul.png
 
-Управление изменениями
+Новые фичи
 
-* Copy-paste + cleanup
-* Всегда план отката
+• Copy-paste + cleanup
+• Всегда план отката
 
-Feature toggle
+Feature toggles
+a.k.a.
+Рубильники
 
-* Клиенты
-* Платформы
-* Партиции
+• Партиции
+• Web/Mobile/API/...
+• Android/iOS/Chrome/...
 
 Масштабирование
 
 По данным
 
-Партиционировать/шардировать
-
-* Вертикально/функционально
-* Горизонтально
+Разделяй и властвуй!
+• Вертикально/функционально
+• Горизонтально
 
 По запросам
 
 Горизонтально
-
-* Инстансами
-* Autoscaling
+• Машины/инстансы
+• Autoscaling
 
 Функционально
-
-* По типам клиентов
-* Real-time vs Batch
-* ...
+• По типам клиентов
+• Real-time vs Batch
+• ...
 
 Балансировка
 
-* DNS (GSLB)
-* LVS/custom (HTTP)
-* Smart client (RPC)
+• DNS (GSLB)
+• LVS/custom (HTTP)
+• Smart client (RPC)
 
 Отказоустойчивость
 
-* Graceful degradation
-* Feature toggles/stubs
-* Service DAG
-* Start с недоступностью
+• Graceful degradation
+• Feature toggles/stubs
+• Service DAG
+• Start с недоступностью
 
 Отказоустойчивость
 (как и бекапы)
-нужно регулярно
-ТЕСТИРОВАТЬ
-
-@fig/circuit.png
+не работают без
+РЕГУЛЯРНОГО ТЕСТИРОВАНИЯ
 
 Retries
 
-* ConnectionTimeout vs ReadTimeout
-* Retry storm
-* Поэтому на верхнем уровне
-* Exponential back-off
+• ConnectionTimeout vs ReadTimeout
+• Retry storm
+• Поэтому на верхнем уровне
+• Exponential back-off
+
+@fig/circuit.png
 
 Speculative retry
-* Стабильное поведение
-* Time budget propagation
+• Стабильное поведение
+• Time budget propagation
 
 Наблюдаемость
 
-(Open)Tracing
-
 Метрики
 
-* Mission-critical
-* Нет причин экономить*
-* Calls/errors/duration/sizes/...
-* (Hdr)Histogram vs avg
+• Mission-critical
+• Нет причин экономить*
+• Calls/errors/duration/sizes/...
+• (Hdr)Histogram vs avg
 
 Dimensions
-* Кто (src)
-* Куда (dst)
-* Что (операция)
-* Партиция/клиент/платформа
-* Параметры операций
-* Типы ошибок
+• Кто (src)
+• Куда (dst)
+• Что (операция)
+• Партиция/клиент/платформа
+• Параметры операций
+• Типы ошибок
 
 @fig/druid.png
 
+@fig/opentracing.png
+
 Health checks
 
-* Mission-critical
-* Don't be noisy
+• Mission-critical
+• Don't be noisy
 
 Неочевидное
-
-* External availability
-* SSL expiration
+• External availability
+• SSL expiration
 
 Диагностика
 
 (Авто)поиск аномалий
-* Сравнение с трендами
-* (Авто)корреляции метрик
-* Day drill
+• Сравнение с трендами
+• (Авто)корреляции метрик
+• Day drill
 
 Логи
 
-* Mission-critical
-* Агрегация
-* Фильтрация
+• Mission-critical
+• Агрегация
+• Фильтрация
 
 Эксплуатация
 
@@ -300,15 +284,27 @@ Everything encrypted
 
 JVM
 
-* jstack
-* jmap
-* heap dump
+• jstack
+• jmap
+• heap dump
 
 JIT
 
-* Время на прогрев
-* Плавный ввод в ротацию
-* Включение фич
+• Время на прогрев
+• Плавный ввод в ротацию
+• Включение фич
+
+Linux
+
+@fig/linux_observability_tools.png
+
+@fig/linux_static_tools.png
+
+@fig/linux_benchmarking_tools.png
+
+@fig/linux_tuning_tools.png
+
+@fig/perf-tools.png
 
 Reference
 
@@ -324,7 +320,31 @@ Reference
 
 @fig/jcip.jpg
 
+@fig/brendangregg.png
+
+@fig/concurrency-interest.png
+
+@fig/mechanical-sympathy.png
+
+@fig/jugru.png
+
+@fig/habr.png
+
+@fig/blogs.png
+
+@fig/intern.png
+
 Спасибо за внимание!
 
 Вадим Цесько
-incubos.org
+incubos.org/contacts
+
+Bonus
+
+5 баллов за развёрнутый фидбек.
+Напишите на incubos@yandex.com, что
+• понравилось
+• было непонятно
+• было бесполезно/надо выкинуть
+• стоит (и как) улучшить
+• стоит добавить
