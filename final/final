@@ -1,0 +1,330 @@
+# Copyright © 2019 Vadim TSesko
+# Supposed to be presented by sent (https://tools.suckless.org/sent/)
+
+Designing and Developing
+Highload Systems
+by Вадим Цесько
+
+Кто этот парень?
+
+@fig/ftk.png
+
+@fig/yandex.png
+
+@fig/compscicenter.png
+
+@fig/ok.png
+
+@fig/nosql.png
+
+@fig/highload.png
+
+Формат
+
+Ортогональные аспекты
+проектирования и
+разработки
+
+https://en.wikipedia.org/wiki/Non-functional_requirement
+
+Семинар, а не лекция
+
+* Don't panic
+* Непонятно -- прерывайте
+* Задавайте вопросы
+* Критикуйте
+
+На практике
+
+* Всегда диапазон решений
+* Профдеформация
+* https://en.wikipedia.org/wiki/Cognitive_bias
+
+ID
+
+int?
+
+long?
+
+String ID!
+
+"<version>:<long>"
+
+"base64(Protobuf)"
+
+x.y.z
+
+https://semver.org
+
+Алгоритмы и структуры
+тоже развиваются
+
+https://github.com/multiformats
+
+Форматы
+
+* Расширяемые
+* Самоописываемые
+
+* http://avro.apache.org/
+* https://thrift.apache.org/
+* Protobuf
+* JSON
+* version + binary
+* ...
+
+Версионируемый
+репозиторий
+моделей
+
+Immutability
+
+* Concurrent по построению
+* Immutable derivatives
+* Caching-friendly
+
+Но!
+
+Computation/space
+amplification
+
+@fig/ipfs.png
+
+Microservices
+
+organizations which design systems ...
+are constrained to produce designs
+which are copies of the communication
+structures of these organizations.
+— M. Conway
+
+* Понятный замкнутый домен
+* 1 команда : N сервисов
+
+Что это даёт?
+
+* Сервис = единица отказа
+* Изменения/деплой
+* Ресурсы
+* Масштабируемость
+* Наблюдаемость
+* (Независимый стек)
+
+Colocation
+
+* Взаимовлияние
+* Ресурсы
+* Координация
+* Масштабируемость
+* Наблюдаемость
+
+Устройство
+микросервиса
+
+Синхронная
+обработка
+
+* <1K потоков
+* <1К запросов "в полёте"
+
+Асинхронная
+обработка
+
+* N x cores потоков
+* Сколько угодно запросов "в полёте"
+
+@fig/fsm.svg
+
+Пулы потоков
+
+* IO vs CPU-bound
+* Освобождаем IO ASAP
+* Per service
+
+* Наблюдаемость
+* Изоляция
+
+* Ограниченные очереди
+* LIFO?
+
+Back pressure
+
+@fig/reactive.png
+
+* Paging/chunking or limit
+* Backward/forward marker
+
+* Ссылки на ресурсы
+* Мультиплексирование
+
+@fig/grpc.png
+
+@fig/http3.png
+
+Конфигурирование
+
+* Mission-critical
+* Fallback snapshot
+* Audit log
+* Push vs Poll
+
+На практике
+
+* By app
+* By host/cluster
+* ${other.property}
+
+@fig/typesafe.png
+
+@fig/consul.png
+
+Управление изменениями
+
+* Copy-paste + cleanup
+* Всегда план отката
+
+Feature toggle
+
+* Клиенты
+* Платформы
+* Партиции
+
+Масштабирование
+
+По данным
+
+Партиционировать/шардировать
+
+* Вертикально/функционально
+* Горизонтально
+
+По запросам
+
+Горизонтально
+
+* Инстансами
+* Autoscaling
+
+Функционально
+
+* По типам клиентов
+* Real-time vs Batch
+* ...
+
+Балансировка
+
+* DNS (GSLB)
+* LVS/custom (HTTP)
+* Smart client (RPC)
+
+Отказоустойчивость
+
+* Graceful degradation
+* Feature toggles/stubs
+* Service DAG
+* Start с недоступностью
+
+Отказоустойчивость
+(как и бекапы)
+нужно регулярно
+ТЕСТИРОВАТЬ
+
+@fig/circuit.png
+
+Retries
+
+* ConnectionTimeout vs ReadTimeout
+* Retry storm
+* Поэтому на верхнем уровне
+* Exponential back-off
+
+Speculative retry
+* Стабильное поведение
+* Time budget propagation
+
+Наблюдаемость
+
+(Open)Tracing
+
+Метрики
+
+* Mission-critical
+* Нет причин экономить*
+* Calls/errors/duration/sizes/...
+* (Hdr)Histogram vs avg
+
+Dimensions
+* Кто (src)
+* Куда (dst)
+* Что (операция)
+* Партиция/клиент/платформа
+* Параметры операций
+* Типы ошибок
+
+@fig/druid.png
+
+Health checks
+
+* Mission-critical
+* Don't be noisy
+
+Неочевидное
+
+* External availability
+* SSL expiration
+
+Диагностика
+
+(Авто)поиск аномалий
+* Сравнение с трендами
+* (Авто)корреляции метрик
+* Day drill
+
+Логи
+
+* Mission-critical
+* Агрегация
+* Фильтрация
+
+Эксплуатация
+
+Терминирование SSL
+vs
+Everything encrypted
+
+Медленные
+(мобильные)
+клиенты
+
+@fig/http2.png
+
+JVM
+
+* jstack
+* jmap
+* heap dump
+
+JIT
+
+* Время на прогрев
+* Плавный ввод в ротацию
+* Включение фич
+
+Reference
+
+@fig/technopolis.png
+
+@fig/data-intensive.png
+
+@fig/sre.png
+
+@fig/cloud.jpeg
+
+@fig/jmm.png
+
+@fig/jcip.jpg
+
+Спасибо за внимание!
+
+Вадим Цесько
+incubos.org
