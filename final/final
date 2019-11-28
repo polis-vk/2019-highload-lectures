@@ -32,11 +32,34 @@ int?
 
 long?
 
+А в кластере?
+
+Единый генератор
+• Монотонно
+• Узкое место
+• SPoF
+
+Распределение диапазонов
+• Примерно монотонно
+• Быстрее
+• Более отказоустойчиво
+
+https://en.wikipedia.org/wiki/Universally_unique_identifier
+
+Reference
+
 String?
 
 "<version>:<long>"
 
 "base64(Protobuf)"
+
+Public API
+
+• https://en.wikipedia.org/wiki/JSON_Web_Token
+• URL signing
+• Throttling
+• Versioning
 
 x.y.z
 
@@ -45,19 +68,62 @@ https://semver.org
 Алгоритмы и структуры
 тоже развиваются
 
-https://github.com/multiformats
+https://multiformats.io/
+
+@fig/multiformats.png
 
 Форматы
 
 • Расширяемые
 • Самоописываемые
 
+• Protobuf
 • http://avro.apache.org/
 • https://thrift.apache.org/
-• Protobuf
 • JSON
 • version + binary
 • ...
+
+message Person {
+  required string name = 1;
+  required int32 id = 2;
+  optional string email = 3;
+}
+
+Person john = Person.newBuilder()
+    .setId(1234)
+    .setName("John Doe")
+    .setEmail("jdoe@example.com")
+    .build();
+output = new FileOutputStream(args[0]);
+john.writeTo(output);
+
+{"namespace": "example.avro",
+ "type": "record",
+ "name": "User",
+ "fields": [
+     {"name": "name", "type": "string"},
+     {"name": "favorite_number",  "type": ["int", "null"]},
+     {"name": "favorite_color", "type": ["string", "null"]}
+ ]
+}
+
+User user = User.newBuilder()
+             .setName("Charlie")
+             .setFavoriteColor("blue")
+             .setFavoriteNumber(null)
+             .build();
+
+DatumWriter<User> userDatumWriter = new SpecificDatumWriter<User>(User.class);
+DataFileWriter<User> dataFileWriter = new DataFileWriter<User>(userDatumWriter);
+dataFileWriter.create(user.getSchema(), new File("users.avro"));
+dataFileWriter.append(user);
+dataFileWriter.close();
+
+Schema schema = new Schema.Parser().parse(new File("user.avsc"));
+GenericRecord user = new GenericData.Record(schema);
+user.put("name", "Alyssa");
+user.put("favorite_number", 256);
 
 Версионируемый
 репозиторий
@@ -73,6 +139,12 @@ Immutability
 
 Computation/space
 amplification
+
+https://en.wikipedia.org/wiki/Persistent_data_structure
+https://en.wikipedia.org/wiki/Hash_consing
+https://en.wikipedia.org/wiki/Content-addressable_storage
+https://en.wikipedia.org/wiki/Venti
+https://en.wikipedia.org/wiki/InterPlanetary_File_System
 
 @fig/ipfs.png
 
@@ -141,7 +213,9 @@ Back pressure
 • Paging/chunking and/or limit
 • Backward/forward marker
 
-• Ссылки на ресурсы
+Полнота ответа
+
+• Ссылки на (под)ресурсы
 • Мультиплексирование
 
 @fig/grpc.png
@@ -219,22 +293,51 @@ Retries
 • ConnectionTimeout vs ReadTimeout
 • Retry storm
 • Поэтому на верхнем уровне
-• Exponential back-off
+• https://cloud.google.com/storage/docs/exponential-backoff
+
+@fig/backoff.png
 
 @fig/circuit.png
 
 Speculative retry
-• Стабильное поведение
+• Больше ресурсов
+• Но стабильное поведение
 • Time budget propagation
+
+Очереди
+
+• Асинхронная обработка
+• Все задачи в конец
+• Обработчики из начала
+
+Что это даёт?
+• Отказоустойчивость
+• Масштабируемость
+
+Challenges
+• Хранение offset
+• Идемпотентность
+• Партиционирование данных
+• Транзакционность в партиции
+
+@fig/kafka.png
+
+Design patterns
+• https://en.wikipedia.org/wiki/Event-driven_architecture
+• https://martinfowler.com/eaaDev/EventSourcing.html
+• https://martinfowler.com/bliki/CQRS.html
 
 Наблюдаемость
 
 Метрики
-
 • Mission-critical
 • Нет причин экономить*
 • Calls/errors/duration/sizes/...
 • (Hdr)Histogram vs avg
+
+• https://prometheus.io
+• https://grafana.com
+• https://metrics.dropwizard.io
 
 Dimensions
 • Кто (src)
@@ -252,6 +355,9 @@ Health checks
 
 • Mission-critical
 • Don't be noisy
+
+• https://metrics.dropwizard.io
+• https://www.consul.io
 
 Неочевидное
 • External availability
@@ -327,6 +433,8 @@ Reference
 @fig/mechanical-sympathy.png
 
 @fig/jugru.png
+
+@fig/reliability.png
 
 @fig/habr.png
 
